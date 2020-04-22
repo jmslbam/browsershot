@@ -26,6 +26,7 @@ class Browsershot
     protected $screenshotType = 'png';
     protected $screenshotQuality = null;
     protected $temporaryHtmlDirectory;
+    protected $temporaryDirectory = '';
     protected $timeout = 60;
     protected $url = '';
     protected $additionalOptions = [];
@@ -670,9 +671,15 @@ class Browsershot
         return $command;
     }
 
+    public function setTemporaryDirectory( $temporaryDirectory ): self {
+        $this->temporaryDirectory = $temporaryDirectory;
+
+        return $this;
+    }
+
     protected function createTemporaryHtmlFile(): string
     {
-        $this->temporaryHtmlDirectory = (new TemporaryDirectory())->create();
+        $this->temporaryHtmlDirectory = (new TemporaryDirectory($this->temporaryDirectory))->create();
 
         file_put_contents($temporaryHtmlFile = $this->temporaryHtmlDirectory->path('index.html'), $this->html);
 
